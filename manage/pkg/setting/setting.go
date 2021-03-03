@@ -5,13 +5,14 @@ import (
 	"log"
 )
 
-var(
+var (
 	Cfg *ini.File
 )
+
 func init() {
 	var err error
-	Cfg, err = ini.Load("conf/app.ini")
+	Cfg, err = ini.Load("D:\\GoProject\\study6\\manage\\conf\\manage.ini")
 	if err != nil {
-		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
+		log.Fatalf("Fail to parse ini: %v", err)
 	}
 }
