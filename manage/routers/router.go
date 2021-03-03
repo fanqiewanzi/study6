@@ -14,8 +14,8 @@ func InitRouter() *gin.Engine {
 		apiv1.POST("/insertgrade", api.InsertGrade)
 		apiv1.POST("/setgrade", api.SetGrade)
 		apiv1.GET("/sortgrade", api.SortGrade)
+		apiv1.DELETE("/delete", api.Delete)
 	}
 
 	return r
-
 }
