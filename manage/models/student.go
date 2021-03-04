@@ -15,13 +15,11 @@ func GetStudent() (stu []Studentgrade) {
 
 //插入数据
 func InsertStudent(stu Studentgrade) bool {
-	var stus Studentgrade
-	db.Where("id=?", stu.Id).Find(&stus)
-	if stus.Id != 0 {
-		return false
-	}
 	db.Create(stu)
-	return true
+	if db.NewRecord(stu) {
+		return true
+	}
+	return false
 }
 
 //根据学号设置成绩

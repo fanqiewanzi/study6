@@ -2,15 +2,12 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"study6/manage/middleware"
 	"study6/manage/routers/api"
 )
 
 func InitRouter() *gin.Engine {
-	r := gin.New()
-	r.Use(middleware.Log())
-	r.Use(gin.Recovery())
-	//请求路径和对应的Handler
+	r := gin.Default()
+
 	apiv1 := r.Group("/student")
 	{
 		apiv1.GET("/getallgrade", api.GetAllGrade)
