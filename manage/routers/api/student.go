@@ -7,6 +7,7 @@ import (
 	"study6/manage/models"
 )
 
+//查询所有学生成绩
 func GetAllGrade(context *gin.Context) {
 	data := make(map[string]interface{})
 	data["lists"] = models.GetStudent()
@@ -17,30 +18,48 @@ func GetAllGrade(context *gin.Context) {
 	})
 }
 
+//插入学生信息
 func InsertGrade(context *gin.Context) {
 	var stu models.Studentgrade
-	stu.Id = com.StrTo(context.Query("id")).MustInt()
-	stu.Name = context.Query("name")
-	stu.Grade, _ = com.StrTo(context.Query("grade")).Float64()
-	models.InsertStudent(stu)
-	context.JSON(http.StatusOK, gin.H{
-		"code": http.StatusOK,
-		"msg":  "插入成功",
-		"data": stu,
-	})
+	//结构体与json表单进行数据绑定
+	context.ShouldBindJSON(&stu)
+	ok := models.InsertStudent(stu)
+	if ok {
+		context.JSON(http.StatusOK, gin.H{
+			"code": http.StatusOK,
+			"msg":  "插入成功",
+			"data": stu,
+		})
+	} else {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code": http.StatusBadRequest,
+			"msg":  "插入失败",
+			"data": stu,
+		})
+	}
 }
+
+//根据学号设置成绩
 func SetGrade(context *gin.Context) {
 	var stu models.Studentgrade
 	stu.Id = com.StrTo(context.Query("id")).MustInt()
 	stu.Grade, _ = com.StrTo(context.Query("grade")).Float64()
-	models.SetGrade(stu.Id, stu.Grade)
-	context.JSON(http.StatusOK, gin.H{
-		"code": http.StatusOK,
-		"msg":  "更新成功",
+	ok := models.SetGrade(stu.Id, stu.Grade)
+	if ok {
+		context.JSON(http.StatusOK, gin.H{
+			"code": http.StatusOK,
+			"msg":  "更新成功",
+			"data": stu,
+		})
+	}
+	context.JSON(http.StatusBadRequest, gin.H{
+		"code": http.StatusBadRequest,
+		"msg":  "更新失败",
 		"data": stu,
 	})
 }
 
+//升序输出所有学生成绩
 func SortGrade(context *gin.Context) {
 	data := make(map[string]interface{})
 	data["lists"] = models.SortGrade()
@@ -50,6 +69,8 @@ func SortGrade(context *gin.Context) {
 		"data": data,
 	})
 }
+
+//根据学号删除学生
 func Delete(context *gin.Context) {
 	id := com.StrTo(context.Query("id")).MustInt()
 	if models.DeleteById(id) {
