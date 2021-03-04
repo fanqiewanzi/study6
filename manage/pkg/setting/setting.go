@@ -9,6 +9,7 @@ var (
 	Cfg *ini.File
 )
 
+//加载ini文件
 func init() {
 	var err error
 	Cfg, err = ini.Load("D:\\GoProject\\study6\\manage\\conf\\manage.ini")
