@@ -2,11 +2,15 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"study6/manage/middleware"
 	"study6/manage/routers/api"
 )
 
+//初始化gin引擎
 func InitRouter() *gin.Engine {
-	r := gin.Default()
+	r := gin.New()
+	r.Use(middleware.Log())
+	r.Use(gin.Recovery())
 
 	apiv1 := r.Group("/student")
 	{
