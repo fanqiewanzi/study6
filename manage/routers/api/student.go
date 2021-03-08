@@ -5,15 +5,17 @@ import (
 	"github.com/unknwon/com"
 	"net/http"
 	"study6/manage/models"
+	"study6/manage/pkg/exception"
 )
 
 //查询所有学生成绩
 func GetAllGrade(context *gin.Context) {
 	data := make(map[string]interface{})
+	code := exception.SUCCESS
 	data["lists"] = models.GetStudent()
 	context.JSON(http.StatusOK, gin.H{
-		"code": http.StatusOK,
-		"msg":  "查询成功",
+		"code": code,
+		"msg":  exception.GetMsg(code),
 		"data": data,
 	})
 }
@@ -21,40 +23,37 @@ func GetAllGrade(context *gin.Context) {
 //插入学生信息
 func InsertGrade(context *gin.Context) {
 	var stu models.Studentgrade
+	var code int
 	//结构体与json表单进行数据绑定
 	context.ShouldBindJSON(&stu)
 	ok := models.InsertStudent(stu)
 	if ok {
-		context.JSON(http.StatusOK, gin.H{
-			"code": http.StatusOK,
-			"msg":  "插入成功",
-			"data": stu,
-		})
+		code = exception.SUCCESS
 	} else {
-		context.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
-			"msg":  "插入失败",
-			"data": stu,
-		})
+		code = exception.ERROR
 	}
+	context.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  exception.GetMsg(code),
+		"data": stu,
+	})
 }
 
 //根据学号设置成绩
 func SetGrade(context *gin.Context) {
 	var stu models.Studentgrade
+	var code int
 	stu.Id = com.StrTo(context.Query("id")).MustInt()
 	stu.Grade, _ = com.StrTo(context.Query("grade")).Float64()
 	ok := models.SetGrade(stu.Id, stu.Grade)
 	if ok {
-		context.JSON(http.StatusOK, gin.H{
-			"code": http.StatusOK,
-			"msg":  "更新成功",
-			"data": stu,
-		})
+		code = exception.SUCCESS
+	} else {
+		code = exception.ERROR
 	}
-	context.JSON(http.StatusBadRequest, gin.H{
-		"code": http.StatusBadRequest,
-		"msg":  "更新失败",
+	context.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  exception.GetMsg(code),
 		"data": stu,
 	})
 }
@@ -63,9 +62,10 @@ func SetGrade(context *gin.Context) {
 func SortGrade(context *gin.Context) {
 	data := make(map[string]interface{})
 	data["lists"] = models.SortGrade()
+	code := exception.SUCCESS
 	context.JSON(http.StatusOK, gin.H{
-		"code": http.StatusOK,
-		"msg":  "查询成功",
+		"code": code,
+		"msg":  exception.GetMsg(code),
 		"data": data,
 	})
 }
@@ -73,15 +73,14 @@ func SortGrade(context *gin.Context) {
 //根据学号删除学生
 func Delete(context *gin.Context) {
 	id := com.StrTo(context.Query("id")).MustInt()
+	var code int
 	if models.DeleteById(id) {
-		context.JSON(http.StatusOK, gin.H{
-			"code": http.StatusOK,
-			"msg":  "删除成功",
-		})
+		code = exception.SUCCESS
 	} else {
-		context.JSON(http.StatusOK, gin.H{
-			"code": http.StatusOK,
-			"msg":  "删除失败",
-		})
+		code = exception.ERROR
 	}
+	context.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  exception.GetMsg(code),
+	})
 }

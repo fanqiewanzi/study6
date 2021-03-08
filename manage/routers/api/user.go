@@ -23,15 +23,16 @@ func Login(c *gin.Context) {
 	if user.Password == u.Password {
 		token, err = util.CreatJwt(user.UserName, user.Password)
 		if err != nil {
-			code = http.StatusBadRequest
+			code = exception.ERROR_AUTH_CREAT_TOKEN
 		}
 	} else {
-		code = http.StatusBadRequest
+		code = exception.ERROR_WRONG_ELEMENT
 	}
 	c.JSON(code, gin.H{
-		"code":  code,
-		"data":  user,
-		"token": token,
+		"code":    code,
+		"message": exception.GetMsg(code),
+		"data":    user,
+		"token":   token,
 	})
 
 }
@@ -39,19 +40,17 @@ func Login(c *gin.Context) {
 //注册逻辑
 func Register(c *gin.Context) {
 	var user models.User
-	code := http.StatusOK
+	var code int
 	//绑定Json
 	c.ShouldBindJSON(&user)
 	ok := models.InsertUser(user)
 	if ok {
-		c.JSON(200, gin.H{
-			"code": code,
-			"data": user,
-		})
+		code = exception.SUCCESS
 	} else {
-		c.JSON(400, gin.H{
-			"code": code,
-			"data": user,
-		})
+		code = exception.ERROR_SAME_NAME
 	}
+	c.JSON(http.StatusOK, gin.H{
+		"code":    code,
+		"message": exception.GetMsg(code),
+	})
 }

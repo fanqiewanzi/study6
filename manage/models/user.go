@@ -18,13 +18,13 @@ func InsertUser(user User) bool {
 
 	//查找是否存在相同用户名的
 	db.Table("users").Where("userName=?", user.UserName).Find(&u)
-	if u != nil {
+	if len(u) != 0 {
 		return false
 	}
 	//创建新用户
 	db.Table("users").Create(&user)
 	//判断是否新增成功
-	if db.Table("users").NewRecord(user) {
+	if !db.Table("users").NewRecord(user) {
 		return true
 	}
 	return false

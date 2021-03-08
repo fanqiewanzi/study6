@@ -7,6 +7,8 @@ var Msg = map[int]string{
 	ERROR_AUTH_CHECK_TOKEN_TIMEOUT: "TOKEN过期",
 	ERROR_AUTH_CREAT_TOKEN:         "TOKEN创建失败",
 	ERROR_AUTH:                     "TOKEN错误",
+	ERROR_WRONG_ELEMENT:            "用户名或密码错误",
+	ERROR_SAME_NAME:                "用户名已被注册",
 }
 
 func GetMsg(code int) string {
