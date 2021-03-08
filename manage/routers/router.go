@@ -13,6 +13,7 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 
 	apiv1 := r.Group("/student")
+	apiv1.Use(middleware.JWT())
 	{
 		apiv1.GET("/getallgrade", api.GetAllGrade)
 		apiv1.POST("/insertgrade", api.InsertGrade)
@@ -20,6 +21,10 @@ func InitRouter() *gin.Engine {
 		apiv1.GET("/sortgrade", api.SortGrade)
 		apiv1.DELETE("/delete", api.Delete)
 	}
-
+	apiv2 := r.Group("/index")
+	{
+		apiv2.POST("/register", api.Register)
+		apiv2.GET("login", api.Login)
+	}
 	return r
 }

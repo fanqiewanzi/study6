@@ -6,7 +6,8 @@ import (
 )
 
 var (
-	Cfg *ini.File
+	Cfg       *ini.File
+	JwtSecret string
 )
 
 //读取ini文件初始化
@@ -16,4 +17,14 @@ func init() {
 	if err != nil {
 		log.Fatalf("Fail to parse ini: %v", err)
 	}
+	load()
+}
+
+//加载JWT配置
+func load() {
+	sc, err := Cfg.GetSection("JWT")
+	if err != nil {
+		log.Fatalf("Fail to get: %v", err)
+	}
+	JwtSecret = sc.Key("SECRET").String()
 }

@@ -61,6 +61,5 @@ func Log() gin.HandlerFunc {
 		})
 		//将数据写入log
 		entry.Info()
-
 	}
 }
