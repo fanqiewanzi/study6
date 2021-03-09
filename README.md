@@ -7,3 +7,10 @@ Gin框架还有很多不会的
 学生成绩管理在mannage里面
 
 logger在mannage的middleware文件夹里面
+
+
+JWT就写在中间件Middleware还写了一个工具包
+
+API文档
+
+https://www.showdoc.com.cn/1282851907696554?page_id=6428164854291534
