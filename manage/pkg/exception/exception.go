@@ -9,4 +9,5 @@ const (
 	ERROR_AUTH                     = 20004
 	ERROR_WRONG_ELEMENT            = 20005
 	ERROR_SAME_NAME                = 20006
+	ERROR_ENCODE_FAIL              = 20007
 )

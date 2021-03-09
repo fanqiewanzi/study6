@@ -12,6 +12,7 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.Log())
 	r.Use(gin.Recovery())
 
+	//学生成绩查询相关接口需要身份验证后才能访问
 	apiv1 := r.Group("/student")
 	apiv1.Use(middleware.JWT())
 	{

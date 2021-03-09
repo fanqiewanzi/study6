@@ -9,6 +9,7 @@ var Msg = map[int]string{
 	ERROR_AUTH:                     "TOKEN错误",
 	ERROR_WRONG_ELEMENT:            "用户名或密码错误",
 	ERROR_SAME_NAME:                "用户名已被注册",
+	ERROR_ENCODE_FAIL:              "加密错误",
 }
 
 func GetMsg(code int) string {
