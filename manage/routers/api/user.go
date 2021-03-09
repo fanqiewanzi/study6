@@ -16,11 +16,13 @@ func Login(c *gin.Context) {
 	var err error
 	code := exception.SUCCESS
 
+	user.UserName = c.Query("username")
+	user.Password = c.Query("password")
 	//struct绑定json
-	err = c.ShouldBindJSON(&user)
-	if err != nil {
-		code = exception.ERROR
-	}
+	//err = c.ShouldBindJSON(&user)
+	//if err != nil {
+	//	code = exception.ERROR
+	//}
 	//通过用户名查找用户
 	u := models.GetUserByName(user)
 	//与数据库中加密密码进行比较
