@@ -46,6 +46,7 @@ func init() {
 	if err != nil {
 		log.Println(err)
 	}
+
 }
 
 //关闭数据库连接

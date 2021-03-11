@@ -9,11 +9,11 @@ import (
 )
 
 //查询所有学生成绩
-func GetAllGrade(context *gin.Context) {
+func GetAllGrade(c *gin.Context) {
 	data := make(map[string]interface{})
 	code := exception.SUCCESS
 	data["lists"] = models.GetStudent()
-	context.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  exception.GetMsg(code),
 		"data": data,
@@ -21,18 +21,18 @@ func GetAllGrade(context *gin.Context) {
 }
 
 //插入学生信息
-func InsertGrade(context *gin.Context) {
+func InsertGrade(c *gin.Context) {
 	var stu models.Studentgrade
 	var code int
 	//结构体与json表单进行数据绑定
-	context.ShouldBindJSON(&stu)
+	c.ShouldBindJSON(&stu)
 	ok := models.InsertStudent(stu)
 	if ok {
 		code = exception.SUCCESS
 	} else {
 		code = exception.ERROR
 	}
-	context.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  exception.GetMsg(code),
 		"data": stu,
@@ -40,18 +40,18 @@ func InsertGrade(context *gin.Context) {
 }
 
 //根据学号设置成绩
-func SetGrade(context *gin.Context) {
+func SetGrade(c *gin.Context) {
 	var stu models.Studentgrade
 	var code int
-	stu.Id = com.StrTo(context.Query("id")).MustInt()
-	stu.Grade, _ = com.StrTo(context.Query("grade")).Float64()
+	stu.Id = com.StrTo(c.Query("id")).MustInt()
+	stu.Grade, _ = com.StrTo(c.Query("grade")).Float64()
 	ok := models.SetGrade(stu.Id, stu.Grade)
 	if ok {
 		code = exception.SUCCESS
 	} else {
 		code = exception.ERROR
 	}
-	context.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  exception.GetMsg(code),
 		"data": stu,
@@ -59,11 +59,11 @@ func SetGrade(context *gin.Context) {
 }
 
 //升序输出所有学生成绩
-func SortGrade(context *gin.Context) {
+func SortGrade(c *gin.Context) {
 	data := make(map[string]interface{})
 	data["lists"] = models.SortGrade()
 	code := exception.SUCCESS
-	context.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  exception.GetMsg(code),
 		"data": data,
@@ -71,15 +71,15 @@ func SortGrade(context *gin.Context) {
 }
 
 //根据学号删除学生
-func Delete(context *gin.Context) {
-	id := com.StrTo(context.Query("id")).MustInt()
+func Delete(c *gin.Context) {
+	id := com.StrTo(c.Query("id")).MustInt()
 	var code int
 	if models.DeleteById(id) {
 		code = exception.SUCCESS
 	} else {
 		code = exception.ERROR
 	}
-	context.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  exception.GetMsg(code),
 	})

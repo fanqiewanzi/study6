@@ -4,23 +4,43 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"io"
 	"math"
 	"os"
 	"time"
 )
 
 func Log() gin.HandlerFunc {
-	//设定存储log文件的路径
-	filepath := "log/log"
+	//设定存储log文件的路径,按日期将log分为不同文件
+	filepath := "log/"
+	date := time.Now().Format("2006-01-02")
+	filepath = filepath + date + "log"
+
+	//logrus框架创建一个新的Logger
+	logger := logrus.New()
+
+	//设置默认的日志输出为控制台
+	logger.SetOutput(os.Stdout)
+
+	//日志输出格式
+	logger.SetFormatter(&logrus.TextFormatter{})
+
 	//打开路径下的文件，os.O_RDWR指的是权限为读写，os.O_CREATE指的是若不存在路径文件就创建一个文件,os.ModeAppend是只能增加,0755是linux的权限
 	sc, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0755)
 	if err != nil {
 		fmt.Println("err:", err)
+	} else {
+		//将要日志输出的位置放在一个io.Writer的切片里
+		writers := []io.Writer{
+			sc,
+			os.Stdout,
+		}
+		//设置多输出
+		fileAndStdoutWriter := io.MultiWriter(writers...)
+		//设置Logger输出
+		logger.SetOutput(fileAndStdoutWriter)
 	}
-	//logrus框架创建一个新的Logger
-	logger := logrus.New()
-	//指定打开的文件为logger的输出，会输出一个io.copy出去
-	logger.Out = sc
+
 	//设置logger的等级为debug
 	logger.SetLevel(logrus.DebugLevel)
 
@@ -60,6 +80,6 @@ func Log() gin.HandlerFunc {
 			"Agent":     userAgent,
 		})
 		//将数据写入log
-		entry.Info()
+		entry.Info("info message")
 	}
 }

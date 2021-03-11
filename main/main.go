@@ -7,5 +7,5 @@ import (
 func main() {
 	//upload.LoadTest()
 	r := routers.InitRouter()
-	r.Run()
+	r.Run(":8080")
 }
